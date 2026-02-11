@@ -7,6 +7,11 @@
 A Laravel package for fetching data from [Brønnøysundregisteret](https://data.brreg.no/) (the Norwegian Register of Business Enterprises). Supports
 both Enhetsregisteret and Frivillighetsregisteret.
 
+## Requirements
+
+- PHP 8.2 or higher
+- Laravel 11 or 12
+
 ## Installation
 
 You can install the package via composer:

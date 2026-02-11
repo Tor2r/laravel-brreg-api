@@ -4,7 +4,9 @@
     "keywords": [
         "Tor2r",
         "laravel",
-        "laravel-brreg-api"
+        "laravel-brreg-api",
+        "brreg",
+        "Brønnøysundregisteret"
     ],
     "homepage": "https://github.com/tor2r/laravel-brreg-api",
     "license": "MIT",
@@ -16,7 +18,7 @@
         }
     ],
     "require": {
-        "php": "^8.4",
+        "php": "^8.2",
         "spatie/laravel-package-tools": "^1.16",
         "illuminate/contracts": "^11.0||^12.0"
     },
@@ -30,14 +32,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Tor2r\\BrregAPi\\": "src/",
-            "Tor2r\\BrregAPi\\Database\\Factories\\": "database/factories/"
+            "Tor2r\\BrregAPi\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tor2r\\BrregAPi\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/"
+            "Tor2r\\BrregAPi\\Tests\\": "tests/"
         }
     },
     "scripts": {
