@@ -23,7 +23,7 @@ composer require tor2r/laravel-brreg-api
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-brreg-api-config"
+php artisan vendor:publish --tag="brreg-api-config"
 ```
 
 This is the contents of the published config file:
