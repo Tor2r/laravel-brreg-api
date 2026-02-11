@@ -11,6 +11,8 @@ class BrregAPi
 
     protected string $registryPath = 'enhetsregisteret/api/enheter';
 
+    protected string $embeddedKey = 'enheter';
+
     protected int $defaultLimit;
 
     public function __construct()
@@ -23,6 +25,7 @@ class BrregAPi
     {
         $instance = clone $this;
         $instance->registryPath = 'frivillighetsregisteret/api/frivillige-organisasjoner';
+        $instance->embeddedKey = 'frivillige_organisasjoner';
 
         return $instance;
     }
@@ -40,12 +43,7 @@ class BrregAPi
             throw BrregApiException::requestFailed($response->status(), $response->body());
         }
 
-        return $response->json();
-    }
-
-    public function searchByOrgnr(string $orgnr, ?int $limit = null): array
-    {
-        return $this->search(['organisasjonsnummer' => $orgnr], $limit);
+        return $this->cleanEntity($response->json());
     }
 
     public function searchByName(string $name, ?int $limit = null): array
@@ -64,6 +62,29 @@ class BrregAPi
             throw BrregApiException::requestFailed($response->status(), $response->body());
         }
 
-        return $response->json();
+        return $this->formatSearchResponse($response->json());
+    }
+
+    protected function formatSearchResponse(array $response): array
+    {
+        $entities = $response['_embedded'][$this->embeddedKey] ?? [];
+        $page = $response['page'] ?? [];
+
+        return [
+            'data' => array_map([$this, 'cleanEntity'], $entities),
+            'meta' => [
+                'per_page' => $page['size'] ?? 0,
+                'total' => $page['totalElements'] ?? 0,
+                'total_pages' => $page['totalPages'] ?? 0,
+                'current_page' => $page['number'] ?? 0,
+            ],
+        ];
+    }
+
+    protected function cleanEntity(array $entity): array
+    {
+        unset($entity['_links'], $entity['respons_klasse']);
+
+        return $entity;
     }
 }

@@ -9,6 +9,8 @@ it('can fetch an entity by organisation number', function () {
         'data.brreg.no/enhetsregisteret/api/enheter/987654321' => Http::response([
             'organisasjonsnummer' => '987654321',
             'navn' => 'Test AS',
+            '_links' => ['self' => ['href' => 'https://data.brreg.no/enhetsregisteret/api/enheter/987654321']],
+            'respons_klasse' => 'Enhet',
         ]),
     ]);
 
@@ -17,7 +19,9 @@ it('can fetch an entity by organisation number', function () {
     expect($result)
         ->toBeArray()
         ->toHaveKey('organisasjonsnummer', '987654321')
-        ->toHaveKey('navn', 'Test AS');
+        ->toHaveKey('navn', 'Test AS')
+        ->not->toHaveKey('_links')
+        ->not->toHaveKey('respons_klasse');
 });
 
 it('throws exception when entity is not found', function () {
@@ -36,34 +40,15 @@ it('throws exception on server error', function () {
     app(BrregAPi::class)->getByOrgnr('987654321');
 })->throws(BrregApiException::class, 'Brreg API request failed with status 500');
 
-it('can search by organisation number', function () {
-    Http::fake([
-        'data.brreg.no/enhetsregisteret/api/enheter?organisasjonsnummer=9876543&size=100' => Http::response([
-            '_embedded' => [
-                'enheter' => [
-                    ['organisasjonsnummer' => '987654321', 'navn' => 'Test AS'],
-                ],
-            ],
-            'page' => ['size' => 100, 'totalElements' => 1],
-        ]),
-    ]);
-
-    $result = app(BrregAPi::class)->searchByOrgnr('9876543');
-
-    expect($result)
-        ->toBeArray()
-        ->toHaveKey('_embedded');
-});
-
 it('can search by name', function () {
     Http::fake([
         'data.brreg.no/enhetsregisteret/api/enheter?navn=Sesam&size=100' => Http::response([
             '_embedded' => [
                 'enheter' => [
-                    ['organisasjonsnummer' => '987654321', 'navn' => 'Sesam Stasjon AS'],
+                    ['organisasjonsnummer' => '987654321', 'navn' => 'Sesam Stasjon AS', '_links' => [], 'respons_klasse' => 'Enhet'],
                 ],
             ],
-            'page' => ['size' => 100, 'totalElements' => 1],
+            'page' => ['size' => 100, 'totalElements' => 1, 'totalPages' => 1, 'number' => 0],
         ]),
     ]);
 
@@ -71,20 +56,32 @@ it('can search by name', function () {
 
     expect($result)
         ->toBeArray()
-        ->toHaveKey('_embedded');
+        ->toHaveKey('data')
+        ->toHaveKey('meta');
+
+    expect($result['data'])->toHaveCount(1);
+    expect($result['data'][0])
+        ->toHaveKey('organisasjonsnummer', '987654321')
+        ->toHaveKey('navn', 'Sesam Stasjon AS');
 });
 
 it('can limit search results', function () {
     Http::fake([
         'data.brreg.no/enhetsregisteret/api/enheter?navn=Test&size=10' => Http::response([
             '_embedded' => ['enheter' => []],
-            'page' => ['size' => 10, 'totalElements' => 0],
+            'page' => ['size' => 10, 'totalElements' => 0, 'totalPages' => 0, 'number' => 0],
         ]),
     ]);
 
     $result = app(BrregAPi::class)->searchByName('Test', 10);
 
-    expect($result)->toBeArray();
+    expect($result)
+        ->toBeArray()
+        ->toHaveKey('data')
+        ->toHaveKey('meta');
+
+    expect($result['data'])->toBeEmpty();
+    expect($result['meta'])->toHaveKey('per_page', 10);
 });
 
 it('can fetch voluntary organisations', function () {
@@ -111,7 +108,7 @@ it('can search voluntary organisations by name', function () {
                     ['organisasjonsnummer' => '987654321', 'navn' => 'Frivillig Org'],
                 ],
             ],
-            'page' => ['size' => 100, 'totalElements' => 1],
+            'page' => ['size' => 100, 'totalElements' => 1, 'totalPages' => 1, 'number' => 0],
         ]),
     ]);
 
@@ -119,7 +116,11 @@ it('can search voluntary organisations by name', function () {
 
     expect($result)
         ->toBeArray()
-        ->toHaveKey('_embedded');
+        ->toHaveKey('data')
+        ->toHaveKey('meta');
+
+    expect($result['data'])->toHaveCount(1);
+    expect($result['data'][0])->toHaveKey('navn', 'Frivillig Org');
 });
 
 it('throws exception on search failure', function () {
@@ -138,11 +139,11 @@ it('uses config values', function () {
     Http::fake([
         'data.brreg.no/enhetsregisteret/api/enheter?navn=Config&size=25' => Http::response([
             '_embedded' => ['enheter' => []],
-            'page' => ['size' => 25, 'totalElements' => 0],
+            'page' => ['size' => 25, 'totalElements' => 0, 'totalPages' => 0, 'number' => 0],
         ]),
     ]);
 
     $result = $api->searchByName('Config');
 
-    expect($result)->toBeArray();
+    expect($result['meta'])->toHaveKey('per_page', 25);
 });

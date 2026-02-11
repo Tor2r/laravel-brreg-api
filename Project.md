@@ -10,7 +10,6 @@ Usage style:
 
 - BrregApi::getByOrgnr('987654321'); https://data.brreg.no/enhetsregisteret/api/enheter/{enhetorgnr}
 
-- BrregApi::searchByOrgnr('9876543'); https://data.brreg.no/enhetsregisteret/api/enheter?organisasjonsnummer=123456
 - BrregApi::searchByName('Lindga'); https://data.brreg.no/enhetsregisteret/api/enheter?navn=Sesam
 
 Same for frivillige organisasjoner: https://data.brreg.no/frivillighetsregisteret/api/frivillige-organisasjoner

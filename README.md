@@ -4,7 +4,8 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/tor2r/laravel-brreg-api/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/tor2r/laravel-brreg-api/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/tor2r/laravel-brreg-api.svg?style=flat-square)](https://packagist.org/packages/tor2r/laravel-brreg-api)
 
-A Laravel package for fetching data from [Brønnøysundregisteret](https://data.brreg.no/) (the Norwegian Register of Business Enterprises). Supports
+A Laravel package for fetching basic data from [Brønnøysundregisteret](https://data.brreg.no/) (the Norwegian Register of Business Enterprises).
+Supports
 both Enhetsregisteret and Frivillighetsregisteret.
 
 ## Requirements
@@ -45,9 +46,6 @@ use Tor2r\BrregAPi\Facades\BrregAPi;
 // Fetch a single entity by organisation number
 $entity = BrregAPi::getByOrgnr('987654321');
 
-// Search by (partial) organisation number
-$results = BrregAPi::searchByOrgnr('9876543');
-
 // Search by name
 $results = BrregAPi::searchByName('Sesam');
 
@@ -63,10 +61,49 @@ $org = BrregAPi::voluntary()->getByOrgnr('987654321');
 
 // Search voluntary organisations by name
 $results = BrregAPi::voluntary()->searchByName('Frivillig');
-
-// Search voluntary organisations by organisation number
-$results = BrregAPi::voluntary()->searchByOrgnr('9876543');
 ```
+
+### Response Format
+
+**Single entity** (`getByOrgnr`) returns a flat array with the entity data:
+
+```php
+$entity = BrregAPi::getByOrgnr('925183873');
+
+// [
+//     'organisasjonsnummer' => '925183873',
+//     'navn' => 'FAGFOKUS AS',
+//     'organisasjonsform' => [...],
+//     'forretningsadresse' => [...],
+//     'antallAnsatte' => 7,
+//     ...
+// ]
+```
+
+**Search methods** (`searchByName`) return a structured response with `data` and `meta`:
+
+```php
+$results = BrregAPi::searchByName('Fagfokus');
+
+// [
+//     'data' => [
+//         [
+//             'organisasjonsnummer' => '925183873',
+//             'navn' => 'FAGFOKUS AS',
+//             'antallAnsatte' => 7,
+//             ...
+//         ],
+//     ],
+//     'meta' => [
+//         'per_page' => 100,
+//         'total' => 1,
+//         'total_pages' => 1,
+//         'current_page' => 0,
+//     ],
+// ]
+```
+
+Internal API fields (`_links`, `respons_klasse`) are automatically stripped from responses.
 
 ### Error Handling
 
