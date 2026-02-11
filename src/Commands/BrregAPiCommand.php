@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Tor2r\BrregAPi\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class BrregAPiCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-brreg-api';
 
     public $description = 'My command';
 
