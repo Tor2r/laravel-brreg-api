@@ -1,6 +1,6 @@
 <?php
 
-// config for Tor2r/BrregAPi
+// config for Tor2r/BrregApi
 return [
 
     /*

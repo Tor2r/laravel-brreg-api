@@ -1,6 +1,6 @@
 <?php
 
-namespace Tor2r\BrregAPi\Exceptions;
+namespace Tor2r\BrregApi\Exceptions;
 
 use Exception;
 

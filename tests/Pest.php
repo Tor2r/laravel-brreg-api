@@ -1,5 +1,5 @@
 <?php
 
-use Tor2r\BrregAPi\Tests\TestCase;
+use Tor2r\BrregApi\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

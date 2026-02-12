@@ -1,11 +1,11 @@
 <?php
 
-namespace Tor2r\BrregAPi;
+namespace Tor2r\BrregApi;
 
 use Illuminate\Support\Facades\Http;
-use Tor2r\BrregAPi\Exceptions\BrregApiException;
+use Tor2r\BrregApi\Exceptions\BrregApiException;
 
-class BrregAPi
+class BrregApi
 {
     protected string $baseUrl;
 

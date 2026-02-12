@@ -1,20 +1,20 @@
 <?php
 
-namespace Tor2r\BrregAPi\Facades;
+namespace Tor2r\BrregApi\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static array getByOrgnr(string $orgnr)
  * @method static array searchByName(string $name, ?int $limit = null)
- * @method static \Tor2r\BrregAPi\BrregAPi voluntary()
+ * @method static \Tor2r\BrregApi\BrregApi voluntary()
  *
- * @see \Tor2r\BrregAPi\BrregAPi
+ * @see \Tor2r\BrregApi\BrregApi
  */
-class BrregAPi extends Facade
+class BrregApi extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return \Tor2r\BrregAPi\BrregAPi::class;
+        return \Tor2r\BrregApi\BrregApi::class;
     }
 }

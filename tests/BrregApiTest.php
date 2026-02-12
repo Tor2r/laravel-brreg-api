@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
-use Tor2r\BrregAPi\BrregAPi;
-use Tor2r\BrregAPi\Exceptions\BrregApiException;
+use Tor2r\BrregApi\BrregApi;
+use Tor2r\BrregApi\Exceptions\BrregApiException;
 
 it('can fetch an entity by organisation number', function () {
     Http::fake([
@@ -14,7 +14,7 @@ it('can fetch an entity by organisation number', function () {
         ]),
     ]);
 
-    $result = app(BrregAPi::class)->getByOrgnr('987654321');
+    $result = app(BrregApi::class)->getByOrgnr('987654321');
 
     expect($result)
         ->toBeArray()
@@ -29,7 +29,7 @@ it('throws exception when entity is not found', function () {
         'data.brreg.no/enhetsregisteret/api/enheter/000000000' => Http::response(null, 404),
     ]);
 
-    app(BrregAPi::class)->getByOrgnr('000000000');
+    app(BrregApi::class)->getByOrgnr('000000000');
 })->throws(BrregApiException::class, 'No entity found with organisation number: 000000000');
 
 it('throws exception on server error', function () {
@@ -37,7 +37,7 @@ it('throws exception on server error', function () {
         'data.brreg.no/enhetsregisteret/api/enheter/987654321' => Http::response('Internal Server Error', 500),
     ]);
 
-    app(BrregAPi::class)->getByOrgnr('987654321');
+    app(BrregApi::class)->getByOrgnr('987654321');
 })->throws(BrregApiException::class, 'Brreg API request failed with status 500');
 
 it('can search by name', function () {
@@ -52,7 +52,7 @@ it('can search by name', function () {
         ]),
     ]);
 
-    $result = app(BrregAPi::class)->searchByName('Sesam');
+    $result = app(BrregApi::class)->searchByName('Sesam');
 
     expect($result)
         ->toBeArray()
@@ -73,7 +73,7 @@ it('can limit search results', function () {
         ]),
     ]);
 
-    $result = app(BrregAPi::class)->searchByName('Test', 10);
+    $result = app(BrregApi::class)->searchByName('Test', 10);
 
     expect($result)
         ->toBeArray()
@@ -92,7 +92,7 @@ it('can fetch voluntary organisations', function () {
         ]),
     ]);
 
-    $result = app(BrregAPi::class)->voluntary()->getByOrgnr('987654321');
+    $result = app(BrregApi::class)->voluntary()->getByOrgnr('987654321');
 
     expect($result)
         ->toBeArray()
@@ -112,7 +112,7 @@ it('can search voluntary organisations by name', function () {
         ]),
     ]);
 
-    $result = app(BrregAPi::class)->voluntary()->searchByName('Frivillig');
+    $result = app(BrregApi::class)->voluntary()->searchByName('Frivillig');
 
     expect($result)
         ->toBeArray()
@@ -128,13 +128,13 @@ it('throws exception on search failure', function () {
         'data.brreg.no/enhetsregisteret/api/enheter?navn=Test&size=100' => Http::response('Bad Request', 400),
     ]);
 
-    app(BrregAPi::class)->searchByName('Test');
+    app(BrregApi::class)->searchByName('Test');
 })->throws(BrregApiException::class, 'Brreg API request failed with status 400');
 
 it('uses config values', function () {
     config()->set('brreg-api.results_per_page', 25);
 
-    $api = new BrregAPi;
+    $api = new BrregApi;
 
     Http::fake([
         'data.brreg.no/enhetsregisteret/api/enheter?navn=Config&size=25' => Http::response([

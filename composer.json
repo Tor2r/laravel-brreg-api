@@ -32,12 +32,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Tor2r\\BrregAPi\\": "src/"
+            "Tor2r\\BrregApi\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tor2r\\BrregAPi\\Tests\\": "tests/"
+            "Tor2r\\BrregApi\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -58,10 +58,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Tor2r\\BrregAPi\\BrregAPiServiceProvider"
+                "Tor2r\\BrregApi\\BrregApiServiceProvider"
             ],
             "aliases": {
-                "BrregAPi": "Tor2r\\BrregAPi\\Facades\\BrregAPi"
+                "BrregApi": "Tor2r\\BrregApi\\Facades\\BrregApi"
             }
         }
     },

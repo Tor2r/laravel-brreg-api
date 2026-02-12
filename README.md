@@ -41,26 +41,26 @@ return [
 ### Enhetsregisteret (Business Registry)
 
 ```php
-use Tor2r\BrregAPi\Facades\BrregAPi;
+use Tor2r\BrregApi\Facades\BrregApi;
 
 // Fetch a single entity by organisation number
-$entity = BrregAPi::getByOrgnr('987654321');
+$entity = BrregApi::getByOrgnr('987654321');
 
 // Search by name
-$results = BrregAPi::searchByName('Sesam');
+$results = BrregApi::searchByName('Sesam');
 
 // Limit the number of results
-$results = BrregAPi::searchByName('Sesam', 10);
+$results = BrregApi::searchByName('Sesam', 10);
 ```
 
 ### Frivillighetsregisteret (Voluntary Organisations Registry)
 
 ```php
 // Fetch a single voluntary organisation
-$org = BrregAPi::voluntary()->getByOrgnr('987654321');
+$org = BrregApi::voluntary()->getByOrgnr('987654321');
 
 // Search voluntary organisations by name
-$results = BrregAPi::voluntary()->searchByName('Frivillig');
+$results = BrregApi::voluntary()->searchByName('Frivillig');
 ```
 
 ### Response Format
@@ -68,7 +68,7 @@ $results = BrregAPi::voluntary()->searchByName('Frivillig');
 **Single entity** (`getByOrgnr`) returns a flat array with the entity data:
 
 ```php
-$entity = BrregAPi::getByOrgnr('925183873');
+$entity = BrregApi::getByOrgnr('925183873');
 
 // [
 //     'organisasjonsnummer' => '925183873',
@@ -83,7 +83,7 @@ $entity = BrregAPi::getByOrgnr('925183873');
 **Search methods** (`searchByName`) return a structured response with `data` and `meta`:
 
 ```php
-$results = BrregAPi::searchByName('Fagfokus');
+$results = BrregApi::searchByName('Fagfokus');
 
 // [
 //     'data' => [
@@ -107,13 +107,13 @@ Internal API fields (`_links`, `respons_klasse`) are automatically stripped from
 
 ### Error Handling
 
-The package throws `Tor2r\BrregAPi\Exceptions\BrregApiException` when something goes wrong:
+The package throws `Tor2r\BrregApi\Exceptions\BrregApiException` when something goes wrong:
 
 ```php
-use Tor2r\BrregAPi\Exceptions\BrregApiException;
+use Tor2r\BrregApi\Exceptions\BrregApiException;
 
 try {
-    $entity = BrregAPi::getByOrgnr('000000000');
+    $entity = BrregApi::getByOrgnr('000000000');
 } catch (BrregApiException $e) {
     // "No entity found with organisation number: 000000000"
     echo $e->getMessage();

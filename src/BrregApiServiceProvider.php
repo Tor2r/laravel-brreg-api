@@ -1,11 +1,11 @@
 <?php
 
-namespace Tor2r\BrregAPi;
+namespace Tor2r\BrregApi;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class BrregAPiServiceProvider extends PackageServiceProvider
+class BrregApiServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
@@ -16,8 +16,8 @@ class BrregAPiServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        $this->app->singleton(BrregAPi::class, function () {
-            return new BrregAPi;
+        $this->app->singleton(BrregApi::class, function () {
+            return new BrregApi;
         });
     }
 }
