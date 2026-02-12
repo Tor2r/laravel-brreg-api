@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-brreg-api` will be documented in this file.
 
+## v1.0.2 - 2026-02-12
+
+Renaming class names.
+
 ## v1.0.1 - 2026-02-11
 
 Removed unused files and directories.
