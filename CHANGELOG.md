@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-brreg-api` will be documented in this file.
 
+## v1.0.3 - 2026-03-20
+
+Added support for Laravel 13
+
 ## v1.0.2 - 2026-02-12
 
 Renaming class names.
